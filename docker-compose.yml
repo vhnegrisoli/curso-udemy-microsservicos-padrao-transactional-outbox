@@ -1,0 +1,103 @@
+version: '3'
+
+services:
+  
+  user-db:
+    container_name: user-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: user-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /data/postgres
+    networks:
+      - outbox
+    ports:
+      - 5432:5432
+
+  log-db:
+    image: mongo:latest
+    container_name: log-db
+    restart: always
+    networks:
+      - outbox
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    ports:
+      - 27017:27017
+
+  kafka:
+    container_name: kafka
+    image: obsidiandynamics/kafka
+    restart: "no"
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+    networks:
+      - outbox
+    environment:
+      KAFKA_LISTENERS: "INTERNAL://:29092,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:29092,EXTERNAL://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_ZOOKEEPER_SESSION_TIMEOUT: "6000"
+      KAFKA_RESTART_ATTEMPTS: "10"
+      KAFKA_RESTART_DELAY: "5"
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+    volumes:
+      - ./data/kafka/data:/var/lib/kafka/data
+
+  redpanda-console:
+    container_name: redpanda
+    image: docker.redpanda.com/vectorized/console:latest
+    restart: on-failure
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    ports:
+      - 3000:8080
+    networks:
+      - outbox
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:29092"]
+    depends_on:
+      - "kafka"
+
+  user-service:
+    build: './user-service'
+    container_name: user-service
+    depends_on:
+      - user-db
+      - kafka
+    networks:
+      - outbox
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=user-db
+      - DB_PORT=5432
+      - DB_NAME=user-db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - 8080:8080
+
+  log-service:
+    build: './log-service'
+    container_name: log-service
+    depends_on:
+      - log-db
+      - kafka
+    networks:
+      - outbox
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - MONGO_DB_URI=mongodb://admin:123456@user-db:27017
+    ports:
+      - 8081:8081
+
+networks:
+  outbox:
+    driver: bridge

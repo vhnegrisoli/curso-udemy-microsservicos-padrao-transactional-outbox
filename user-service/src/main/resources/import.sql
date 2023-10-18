@@ -1,0 +1,1 @@
+INSERT INTO public.user(id, username, full_name, document, email, birthday, status, created_at, updated_at) VALUES (1000, 'test', 'Test User', '11122233344', 'test@test.com', '2023-01-01', 'ACTIVE', now(), now());
