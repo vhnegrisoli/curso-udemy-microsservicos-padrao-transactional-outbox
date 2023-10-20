@@ -7,7 +7,24 @@ Para acessar o curso na plataforma, basta acessar esta URL: https://www.udemy.co
 
 ![Curso](Conte%C3%BAdos/Imagem%20Curso.png)
 
+
 ### Sumário:
+
+* [Tecnologias](#tecnologias)
+* [Ferramentas utilizadas](#ferramentas-utilizadas)
+* [Arquitetura Proposta](#arquitetura-proposta)
+* [Execução do projeto](#execu%C3%A7%C3%A3o-do-projeto)
+  * [01 - Execução geral via docker-compose](#01---execu%C3%A7%C3%A3o-geral-via-docker-compose)
+  * [02 - Executando os serviços de bancos de dados e Message Broker](#02---executando-os-servi%C3%A7os-de-bancos-de-dados-e-message-broker)
+  * [03 - Executando manualmente via CLI](#03---executando-manualmente-via-cli)
+* [Acessando a aplicação](#acessando-a-aplica%C3%A7%C3%A3o)
+* [Acessando tópicos com Redpanda Console](#acessando-t%C3%B3picos-com-redpanda-console)
+* [Dados da API](#dados-da-api)
+  * [Criar usuário](#criar-usuário)
+  * [Atualizar usuário](#atualizar-usuário)
+  * [Remover usuário](#remover-usuário)
+  * [Estrutura de payloads do Kafka](#estrutura-de-payloads-do-kafka)
+  * [Acesso ao MongoDB](#acesso-ao-mongodb)
 
 ## Tecnologias
 
@@ -207,7 +224,7 @@ Para atualizar um usuário:
 }
 ```
 
-Output:
+**Output**:
 
 ```json
 {
@@ -223,11 +240,15 @@ Output:
 }
 ```
 
-Para **REMOVER** um usuário:
+### Remover usuário:
+
+Para remover um usuário:
 
 **DELETE** http://localhost:8080/api/user/1
 
-Payload resposta:
+A resposta serão os dados do usuário que foi removido.
+
+**Output**:
 
 ```json
 {
@@ -243,7 +264,7 @@ Payload resposta:
 }
 ```
 
-### Payload para o Kafka
+### Estrutura de payloads do Kafka
 
 A estrutura do payload a ser enviada ao Kafka é:
 
