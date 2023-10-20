@@ -24,28 +24,28 @@ public class EventPredicate {
         wildcardFilter(criteria, "user.document", filters.document());
         wildcardFilter(criteria, "user.email", filters.email());
         wildcardFilter(criteria, "url", filters.url());
-        equalsFilter(criteria, "user.status", filters.status().name());
-        equalsFilter(criteria, "action", filters.action().name());
+        equalsFilter(criteria, "user.status", filters.status());
+        equalsFilter(criteria, "action", filters.action());
         equalsFilter(criteria, "httpMethod", filters.httpMethod());
 
         return new Query(criteria);
     }
 
-    private Criteria equalsFilter(Criteria criteria, String field, String value) {
+    private Criteria equalsFilter(Criteria criteria, String field, Object value) {
         if (isFieldAndValueInformed(field, value)) {
             criteria.and(field).is(value);
         }
         return criteria;
     }
 
-    private Criteria wildcardFilter(Criteria criteria, String field, String value) {
+    private Criteria wildcardFilter(Criteria criteria, String field, Object value) {
         if (isFieldAndValueInformed(field, value)) {
             criteria.and(field).regex(format(WILDCARD_REGEX, value), OPTIONS);
         }
         return criteria;
     }
 
-    private boolean isFieldAndValueInformed(String field, String value) {
+    private boolean isFieldAndValueInformed(String field, Object value) {
         return !isEmpty(field) && !isEmpty(value);
     }
 }
