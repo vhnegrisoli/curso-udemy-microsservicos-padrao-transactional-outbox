@@ -242,7 +242,7 @@ Para atualizar um usuário:
 
 ### Remover usuário:
 
-[Voltar ao início](#sum%C3%A1rio)
+[Voltar ao nível anterior](#dados-da-api)
 
 Para remover um usuário:
 
@@ -268,7 +268,7 @@ A resposta serão os dados do usuário que foi removido.
 
 ### Estrutura de payloads do Kafka
 
-[Voltar ao início](#sum%C3%A1rio)
+[Voltar ao nível anterior](#dados-da-api)
 
 A estrutura do payload a ser enviada ao Kafka é:
 
