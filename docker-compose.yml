@@ -94,7 +94,7 @@ services:
       - outbox
     environment:
       - KAFKA_BROKER=kafka:29092
-      - MONGO_DB_URI=mongodb://admin:123456@user-db:27017
+      - MONGO_DB_URI=mongodb://admin:123456@log-db:27017
     ports:
       - 8081:8081
 
