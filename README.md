@@ -242,6 +242,8 @@ Para atualizar um usuário:
 
 ### Remover usuário:
 
+[Voltar ao início](#sum%C3%A1rio)
+
 Para remover um usuário:
 
 **DELETE** http://localhost:8080/api/user/1
@@ -265,6 +267,8 @@ A resposta serão os dados do usuário que foi removido.
 ```
 
 ### Estrutura de payloads do Kafka
+
+[Voltar ao início](#sum%C3%A1rio)
 
 A estrutura do payload a ser enviada ao Kafka é:
 
